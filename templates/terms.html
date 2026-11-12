@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+
+{% block title %}Terms and Conditions — Spendly{% endblock %}
+
+{% block head %}
+<style>
+    .terms-section {
+        padding: 4rem 2rem;
+        background: var(--paper);
+    }
+
+    .terms-inner {
+        max-width: 760px;
+        margin: 0 auto;
+    }
+
+    .terms-section h1 {
+        font-family: var(--font-display);
+        font-size: clamp(2rem, 4vw, 2.5rem);
+        color: var(--ink);
+        margin-bottom: 0.5rem;
+        line-height: 1.1;
+    }
+
+    .terms-updated {
+        font-size: 0.85rem;
+        color: var(--ink-muted);
+        margin-bottom: 3rem;
+        display: block;
+    }
+
+    .terms-content { margin-top: 2rem; }
+
+    .terms-article {
+        margin-bottom: 2.5rem;
+        padding-bottom: 2.5rem;
+        border-bottom: 1px solid var(--border-soft);
+    }
+
+    .terms-article:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+
+    .terms-article h2 {
+        font-family: var(--font-body);
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--ink);
+        margin-bottom: 1rem;
+    }
+
+    .terms-article p {
+        font-size: 0.95rem;
+        color: var(--ink-soft);
+        line-height: 1.7;
+        margin-bottom: 0.75rem;
+    }
+
+    .terms-article p:last-child {
+        margin-bottom: 0;
+    }
+
+    .terms-article ul {
+        list-style: none;
+        margin: 1rem 0;
+        padding-left: 1.5rem;
+    }
+
+    .terms-article li {
+        font-size: 0.95rem;
+        color: var(--ink-soft);
+        line-height: 1.7;
+        margin-bottom: 0.6rem;
+        position: relative;
+    }
+
+    .terms-article li::before {
+        content: "•";
+        position: absolute;
+        left: -1rem;
+        color: var(--accent);
+        font-weight: 600;
+    }
+
+    @media (max-width: 600px) {
+        .terms-section {
+            padding: 2.5rem 1.5rem;
+        }
+
+        .terms-section h1 {
+            font-size: 1.75rem;
+        }
+
+        .terms-article h2 {
+            font-size: 1.05rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<section class="terms-section">
+    <div class="terms-inner">
+        <h1>Terms and Conditions</h1>
+        <p class="terms-updated">Last updated: November 12, 2026</p>
+
+        <div class="terms-content">
+            <div class="terms-article">
+                <h2>1. Acceptance of Terms</h2>
+                <p>
+                    By accessing and using Spendly ("the Service"), you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by the above, please do not use this service.
+                </p>
+            </div>
+
+            <div class="terms-article">
+                <h2>2. Use of Service</h2>
+                <p>
+                    You agree to use Spendly only for lawful purposes and in a way that does not infringe upon the rights of others or restrict their use and enjoyment of Spendly. Prohibited behaviour includes:
+                </p>
+                <ul>
+                    <li>Harassing or causing distress or inconvenience to any person</li>
+                    <li>Transmitting obscene or offensive content or disrupting the normal flow of dialogue within Spendly</li>
+                    <li>Attempting to gain unauthorized access to the Service or its systems</li>
+                    <li>Interfering with the proper functioning of the Service</li>
+                </ul>
+            </div>
+
+            <div class="terms-article">
+                <h2>3. User Data and Privacy</h2>
+                <p>
+                    Spendly stores your expense data securely on our servers. You are responsible for maintaining the confidentiality of your login credentials. You agree that:
+                </p>
+                <ul>
+                    <li>You will not share your account credentials with anyone</li>
+                    <li>You are responsible for all activity that occurs under your account</li>
+                    <li>You will promptly notify us of any unauthorized use of your account</li>
+                    <li>You will protect sensitive information and use Spendly in compliance with all applicable laws</li>
+                </ul>
+                <p>
+                    For detailed information about how we collect, use, and protect your data, please refer to our Privacy Policy.
+                </p>
+            </div>
+
+            <div class="terms-article">
+                <h2>4. Limitations of Liability</h2>
+                <p>
+                    Spendly is provided on an "as-is" basis. We do not warrant that:
+                </p>
+                <ul>
+                    <li>The Service will be uninterrupted or error-free</li>
+                    <li>The Service will meet your specific requirements</li>
+                    <li>The accuracy or completeness of any data provided through the Service</li>
+                </ul>
+                <p>
+                    In no event shall Spendly be liable for any indirect, incidental, special, or consequential damages arising out of or related to your use of the Service, including but not limited to loss of data or financial loss, even if we have been advised of the possibility of such damages.
+                </p>
+            </div>
+
+            <div class="terms-article">
+                <h2>5. Changes to Terms</h2>
+                <p>
+                    Spendly reserves the right to modify these terms and conditions at any time. Your continued use of the Service following the posting of revised terms means that you accept and agree to the changes. It is your responsibility to review these terms periodically for updates.
+                </p>
+            </div>
+
+            <div class="terms-article">
+                <h2>6. Termination of Service</h2>
+                <p>
+                    Spendly may terminate or suspend your account and access to the Service at any time, for any reason, without notice. Upon termination, your right to use the Service will immediately cease. We may delete your account data after a reasonable period following termination.
+                </p>
+            </div>
+
+            <div class="terms-article">
+                <h2>7. Governing Law</h2>
+                <p>
+                    These terms and conditions are governed by and construed in accordance with the laws of the jurisdiction in which Spendly operates, and you irrevocably submit to the exclusive jurisdiction of the courts located in that area.
+                </p>
+            </div>
+
+            <div class="terms-article">
+                <h2>8. Contact Us</h2>
+                <p>
+                    If you have any questions about these Terms and Conditions, please contact us at support@spendly.com
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
