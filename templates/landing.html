@@ -2,6 +2,76 @@
 
 {% block title %}Spendly — Track Every Rupee{% endblock %}
 
+{% block head %}
+<style>
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal.active {
+        display: flex;
+    }
+
+    .modal-content {
+        background: var(--paper-card);
+        border-radius: var(--radius-lg);
+        width: 90%;
+        max-width: 800px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .modal-close {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: rgba(0, 0, 0, 0.5);
+        color: var(--paper);
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        font-size: 1.5rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+        z-index: 10;
+    }
+
+    .modal-close:hover {
+        background: rgba(0, 0, 0, 0.7);
+    }
+
+    .modal-video-wrapper {
+        position: relative;
+        width: 100%;
+        padding-bottom: 56.25%;
+        height: 0;
+        overflow: hidden;
+    }
+
+    .modal-video-wrapper iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 
 <section class="hero">
@@ -99,4 +169,57 @@
     </div>
 </section>
 
+<!-- Video Modal -->
+<div id="videoModal" class="modal">
+    <div class="modal-content">
+        <button class="modal-close" id="modalClose">&times;</button>
+        <div class="modal-video-wrapper">
+            <iframe id="videoFrame" src="https://www.youtube.com/embed/dQw4w9WgXcQ?enablejsapi=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const videoModal = document.getElementById('videoModal');
+    const modalClose = document.getElementById('modalClose');
+    const seeHowButton = document.querySelector('[href="#features"]');
+    const videoFrame = document.getElementById('videoFrame');
+
+    // Open modal when "See how it works" is clicked
+    seeHowButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        videoModal.classList.add('active');
+    });
+
+    // Close modal when close button is clicked
+    modalClose.addEventListener('click', function() {
+        closeModal();
+    });
+
+    // Close modal when clicking outside the modal content
+    videoModal.addEventListener('click', function(e) {
+        if (e.target === videoModal) {
+            closeModal();
+        }
+    });
+
+    // Close modal function
+    function closeModal() {
+        videoModal.classList.remove('active');
+        // Stop video by replacing src with empty and then restoring it
+        const src = videoFrame.src;
+        videoFrame.src = '';
+        videoFrame.src = src;
+    }
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && videoModal.classList.contains('active')) {
+            closeModal();
+        }
+    });
+</script>
 {% endblock %}
