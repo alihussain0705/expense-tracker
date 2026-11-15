@@ -3,7 +3,7 @@ import sqlite3
 import os
 import tempfile
 from app import app as flask_app
-from database.db import init_db
+from database.db import init_db, seed_db
 
 
 @pytest.fixture
@@ -20,9 +20,10 @@ def app():
     flask_app.config['TESTING'] = True
     flask_app.config['SECRET_KEY'] = 'test-secret-key-for-testing-only'
 
-    # Initialize the test database
+    # Initialize and seed the test database
     with flask_app.app_context():
         init_db()
+        seed_db()
 
     yield flask_app
 

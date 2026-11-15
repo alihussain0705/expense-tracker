@@ -1,5 +1,162 @@
 import pytest
 from app import app as flask_app
+from werkzeug.security import generate_password_hash
+
+
+class TestLogin:
+    """Test suite for user login functionality."""
+
+    def test_login_get(self, client):
+        """Test that GET /login displays the login form."""
+        response = client.get("/login")
+        assert response.status_code == 200
+        assert b"Welcome back" in response.data
+        assert b'name="email"' in response.data
+        assert b'name="password"' in response.data
+
+    def test_login_success(self, app, client):
+        """Test successful login with valid credentials."""
+        # Demo user is seeded in database (demo@spendly.com / demo123)
+        response = client.post(
+            "/login",
+            data={
+                "email": "demo@spendly.com",
+                "password": "demo123",
+            }
+        )
+        # Should redirect to landing page on success
+        assert response.status_code == 302
+        assert response.location.endswith("/")
+
+        # Verify session contains user_id
+        with client.session_transaction() as sess:
+            assert 'user_id' in sess
+            assert sess['user_id'] is not None
+
+    def test_login_invalid_email(self, client):
+        """Test login with non-existent email."""
+        response = client.post(
+            "/login",
+            data={
+                "email": "nonexistent@example.com",
+                "password": "password123",
+            }
+        )
+
+        assert response.status_code == 200
+        assert b"Invalid email or password" in response.data
+
+    def test_login_wrong_password(self, client):
+        """Test login with correct email but wrong password."""
+        response = client.post(
+            "/login",
+            data={
+                "email": "demo@spendly.com",
+                "password": "wrongpassword",
+            }
+        )
+
+        assert response.status_code == 200
+        assert b"Invalid email or password" in response.data
+
+    def test_login_missing_email(self, client):
+        """Test login with missing email field."""
+        response = client.post(
+            "/login",
+            data={
+                "email": "",
+                "password": "password123",
+            }
+        )
+
+        assert response.status_code == 200
+        assert b"Email is required" in response.data
+
+    def test_login_missing_password(self, client):
+        """Test login with missing password field."""
+        response = client.post(
+            "/login",
+            data={
+                "email": "demo@spendly.com",
+                "password": "",
+            }
+        )
+
+        assert response.status_code == 200
+        assert b"Password is required" in response.data
+
+    def test_login_redirects_logged_in_user(self, client):
+        """Test that logged-in users are redirected from /login."""
+        # First, log in
+        client.post(
+            "/login",
+            data={
+                "email": "demo@spendly.com",
+                "password": "demo123",
+            }
+        )
+
+        # Try to access login page while logged in
+        response = client.get("/login", follow_redirects=False)
+
+        # Should redirect to landing page
+        assert response.status_code == 302
+        assert response.location.endswith("/")
+        """Test that leading/trailing whitespace is trimmed from email."""
+        response = client.post(
+            "/login",
+            data={
+                "email": "  demo@spendly.com  ",
+                "password": "demo123",
+            }
+        )
+
+        assert response.status_code == 302
+        assert response.location.endswith("/")
+
+
+class TestLogout:
+    """Test suite for user logout functionality."""
+
+    def test_logout_clears_session(self, client):
+        """Test that logout clears the user session."""
+        # First, log in
+        client.post(
+            "/login",
+            data={
+                "email": "demo@spendly.com",
+                "password": "demo123",
+            }
+        )
+
+        # Verify session is set
+        with client.session_transaction() as sess:
+            assert 'user_id' in sess
+
+        # Log out
+        response = client.post("/logout")
+
+        # Verify session is cleared
+        with client.session_transaction() as sess:
+            assert 'user_id' not in sess
+
+    def test_logout_redirects_to_landing(self, client):
+        """Test that logout redirects to the landing page."""
+        # First, log in
+        client.post(
+            "/login",
+            data={
+                "email": "demo@spendly.com",
+                "password": "demo123",
+            }
+        )
+
+        # Log out
+        response = client.post("/logout")
+
+        # Should redirect to landing page
+        assert response.status_code == 302
+        assert response.location.endswith("/")
 
 
 class TestRegistration:
@@ -174,6 +331,24 @@ class TestRegistration:
 
         assert response.status_code == 200
         assert b"Invalid email format" in response.data
+
+    def test_register_redirects_logged_in_user(self, client):
+        """Test that logged-in users are redirected from /register."""
+        # First, log in
+        client.post(
+            "/login",
+            data={
+                "email": "demo@spendly.com",
+                "password": "demo123",
+            }
+        )
+
+        # Try to access register page while logged in
+        response = client.get("/register", follow_redirects=False)
+
+        # Should redirect to landing page
+        assert response.status_code == 302
+        assert response.location.endswith("/")
 
     def test_register_whitespace_trimmed(self, app, client):
         """Test that leading/trailing whitespace is trimmed from name and email."""
