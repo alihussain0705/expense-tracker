@@ -10,7 +10,13 @@ def get_db():
     Returns:
         sqlite3.Connection: A database connection with row_factory set and foreign keys enabled.
     """
-    db_path = os.path.join(os.path.dirname(__file__), "..", "spendly.db")
+    # Check for test database path (set by test fixtures)
+    db_path = os.environ.get('SPENDLY_DB_PATH')
+
+    if not db_path:
+        # Use production database
+        db_path = os.path.join(os.path.dirname(__file__), "..", "spendly.db")
+
     db = sqlite3.connect(db_path)
     db.row_factory = sqlite3.Row
     db.execute("PRAGMA foreign_keys = ON")
