@@ -1,6 +1,6 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 from database.db import get_db, init_db, seed_db
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 import re
 
@@ -87,8 +87,47 @@ def register():
     return render_template("register.html")
 
 
-@app.route("/login")
+@app.route("/login", methods=["GET", "POST"])
 def login():
+    """Handle user login via GET (form display) and POST (form submission)."""
+    if request.method == "POST":
+        # Extract form data
+        email = request.form.get("email", "").strip()
+        password = request.form.get("password", "")
+
+        error = None
+
+        # Validation
+        if not email:
+            error = "Email is required."
+        elif not password:
+            error = "Password is required."
+
+        # Query database and verify password
+        if not error:
+            try:
+                db = get_db()
+                cursor = db.cursor()
+                cursor.execute("SELECT id, password_hash FROM users WHERE email = ?", (email,))
+                user = cursor.fetchone()
+                db.close()
+
+                if user is None:
+                    error = "Invalid email or password."
+                elif not check_password_hash(user[1], password):
+                    error = "Invalid email or password."
+            except sqlite3.Error as e:
+                error = "Database error. Please try again."
+
+        # Create session on success
+        if not error:
+            session['user_id'] = user[0]
+            return redirect(url_for("profile"))
+
+        # Re-render form with error message
+        return render_template("login.html", error=error)
+
+    # GET request: display the form
     return render_template("login.html")
 
 
@@ -106,9 +145,11 @@ def privacy():
 # Placeholder routes — students will implement these                  #
 # ------------------------------------------------------------------ #
 
-@app.route("/logout")
+@app.route("/logout", methods=["POST"])
 def logout():
-    return "Logout — coming in Step 3"
+    """Clear user session and redirect to landing page."""
+    session.clear()
+    return redirect(url_for("landing"))
 
 
 @app.route("/profile")
