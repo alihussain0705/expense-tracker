@@ -25,6 +25,10 @@ def landing():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     """Handle user registration via GET (form display) and POST (form submission)."""
+    # Redirect logged-in users away from registration page
+    if session.get('user_id'):
+        return redirect(url_for("landing"))
+
     if request.method == "POST":
         # Extract form data
         name = request.form.get("name", "").strip()
@@ -90,6 +94,10 @@ def register():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     """Handle user login via GET (form display) and POST (form submission)."""
+    # Redirect logged-in users away from login page
+    if session.get('user_id'):
+        return redirect(url_for("landing"))
+
     if request.method == "POST":
         # Extract form data
         email = request.form.get("email", "").strip()

@@ -85,7 +85,23 @@ class TestLogin:
         assert response.status_code == 200
         assert b"Password is required" in response.data
 
-    def test_login_whitespace_trimmed(self, client):
+    def test_login_redirects_logged_in_user(self, client):
+        """Test that logged-in users are redirected from /login."""
+        # First, log in
+        client.post(
+            "/login",
+            data={
+                "email": "demo@spendly.com",
+                "password": "demo123",
+            }
+        )
+
+        # Try to access login page while logged in
+        response = client.get("/login", follow_redirects=False)
+
+        # Should redirect to landing page
+        assert response.status_code == 302
+        assert response.location.endswith("/")
         """Test that leading/trailing whitespace is trimmed from email."""
         response = client.post(
             "/login",
@@ -315,6 +331,24 @@ class TestRegistration:
 
         assert response.status_code == 200
         assert b"Invalid email format" in response.data
+
+    def test_register_redirects_logged_in_user(self, client):
+        """Test that logged-in users are redirected from /register."""
+        # First, log in
+        client.post(
+            "/login",
+            data={
+                "email": "demo@spendly.com",
+                "password": "demo123",
+            }
+        )
+
+        # Try to access register page while logged in
+        response = client.get("/register", follow_redirects=False)
+
+        # Should redirect to landing page
+        assert response.status_code == 302
+        assert response.location.endswith("/")
 
     def test_register_whitespace_trimmed(self, app, client):
         """Test that leading/trailing whitespace is trimmed from name and email."""
