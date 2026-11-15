@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile | Spendly{% endblock %}
+
+{% block content %}
+
+<section class="auth-section">
+    <div class="auth-container">
+
+        <div class="auth-header">
+            <h1 class="auth-title">My Profile</h1>
+            <p class="auth-subtitle">Manage your account information</p>
+        </div>
+
+        <div class="auth-card">
+            {% if error %}
+            <div class="auth-error">{{ error }}</div>
+            {% endif %}
+
+            <!-- Profile Information Display -->
+            {% if user %}
+            <div class="profile-info">
+                <div class="info-group">
+                    <label class="info-label">Name</label>
+                    <p class="info-value">{{ user.name }}</p>
+                </div>
+                <div class="info-group">
+                    <label class="info-label">Email</label>
+                    <p class="info-value">{{ user.email }}</p>
+                </div>
+                <div class="info-group">
+                    <label class="info-label">Member Since</label>
+                    <p class="info-value">{{ formatted_date }}</p>
+                </div>
+            </div>
+
+            <!-- Expense Overview Section -->
+            {% if recent_transactions %}
+            <div class="expense-overview">
+                <h2 class="expense-title">Your Expenses</h2>
+
+                <!-- Summary cards -->
+                <div class="expense-summary">
+                    <div class="summary-card">
+                        <p class="summary-label">Total Spent</p>
+                        <p class="summary-value">{{ total_spent_formatted }}</p>
+                    </div>
+                    <div class="summary-card">
+                        <p class="summary-label">Transactions</p>
+                        <p class="summary-value">{{ expense_totals.count }}</p>
+                    </div>
+                </div>
+
+                <!-- Category breakdown -->
+                {% if category_breakdown %}
+                <div class="category-section">
+                    <h3 class="category-title">By Category</h3>
+                    <div class="category-list">
+                        {% for cat in category_breakdown %}
+                        <div class="category-item">
+                            <div class="category-name">{{ cat.category }}</div>
+                            <div class="category-amount">{{ cat.total_formatted }}</div>
+                            <div class="category-count">({{ cat.count }} transaction{{ 's' if cat.count != 1 else '' }})</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Recent transactions -->
+                <div class="recent-section">
+                    <h3 class="recent-title">Recent Transactions</h3>
+                    <div class="transaction-list">
+                        {% for trans in recent_transactions %}
+                        <div class="transaction-item">
+                            <div class="transaction-left">
+                                <div class="transaction-date">{{ trans.date_formatted }}</div>
+                                <div class="transaction-category">{{ trans.category }}</div>
+                                {% if trans.description %}
+                                <div class="transaction-description">{{ trans.description }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="transaction-right">
+                                <div class="transaction-amount">{{ trans.amount_formatted }}</div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <!-- Empty state -->
+            <div class="expense-empty">
+                <p>No expenses recorded yet. Start tracking your spending!</p>
+            </div>
+            {% endif %}
+            {% endif %}
+
+            <!-- Edit Form -->
+            <form method="POST" class="profile-form">
+                <h2 class="profile-form-title">Edit Profile</h2>
+
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        class="form-input"
+                        value="{{ user.name if user else name or '' }}"
+                        placeholder="Enter your name"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        class="form-input"
+                        value="{{ user.email if user else email or '' }}"
+                        placeholder="Enter your email"
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="btn-submit">Save Changes</button>
+            </form>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}
