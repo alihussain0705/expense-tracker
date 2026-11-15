@@ -24,9 +24,9 @@ class TestLogin:
                 "password": "demo123",
             }
         )
-        # Should redirect to profile on success
+        # Should redirect to landing page on success
         assert response.status_code == 302
-        assert response.location.endswith("/profile")
+        assert response.location.endswith("/")
 
         # Verify session contains user_id
         with client.session_transaction() as sess:
@@ -96,7 +96,7 @@ class TestLogin:
         )
 
         assert response.status_code == 302
-        assert response.location.endswith("/profile")
+        assert response.location.endswith("/")
 
 
 class TestLogout:

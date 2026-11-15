@@ -122,7 +122,7 @@ def login():
         # Create session on success
         if not error:
             session['user_id'] = user[0]
-            return redirect(url_for("profile"))
+            return redirect(url_for("landing"))
 
         # Re-render form with error message
         return render_template("login.html", error=error)
