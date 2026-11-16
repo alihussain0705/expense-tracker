@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}My Profile | Spendly{% endblock %}
+{% block title %}My Expenses | Spendly{% endblock %}
 
 {% block content %}
 
@@ -8,31 +8,14 @@
     <div class="auth-container">
 
         <div class="auth-header">
-            <h1 class="auth-title">My Profile</h1>
-            <p class="auth-subtitle">Manage your account information</p>
+            <h1 class="auth-title">My Expenses</h1>
+            <p class="auth-subtitle">Track and manage your spending</p>
         </div>
 
         <div class="auth-card">
             {% if error %}
             <div class="auth-error">{{ error }}</div>
             {% endif %}
-
-            <!-- Profile Information Display -->
-            {% if user %}
-            <div class="profile-info">
-                <div class="info-group">
-                    <label class="info-label">Name</label>
-                    <p class="info-value">{{ user.name }}</p>
-                </div>
-                <div class="info-group">
-                    <label class="info-label">Email</label>
-                    <p class="info-value">{{ user.email }}</p>
-                </div>
-                <div class="info-group">
-                    <label class="info-label">Member Since</label>
-                    <p class="info-value">{{ formatted_date }}</p>
-                </div>
-            </div>
 
             <!-- Expense Overview Section -->
             {% if recent_transactions %}
@@ -94,40 +77,6 @@
                 <p>No expenses recorded yet. Start tracking your spending!</p>
             </div>
             {% endif %}
-            {% endif %}
-
-            <!-- Edit Form -->
-            <form method="POST" class="profile-form">
-                <h2 class="profile-form-title">Edit Profile</h2>
-
-                <div class="form-group">
-                    <label for="name">Name</label>
-                    <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        class="form-input"
-                        value="{{ user.name if user else name or '' }}"
-                        placeholder="Enter your name"
-                        required
-                    >
-                </div>
-
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        class="form-input"
-                        value="{{ user.email if user else email or '' }}"
-                        placeholder="Enter your email"
-                        required
-                    >
-                </div>
-
-                <button type="submit" class="btn-submit">Save Changes</button>
-            </form>
         </div>
 
     </div>

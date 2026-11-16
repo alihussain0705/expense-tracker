@@ -14,42 +14,47 @@ class TestProfile:
         assert response.location.endswith("/login")
 
     def test_profile_get_logged_in(self, app, client):
-        """GET /profile should display profile page for logged-in user."""
+        """GET /profile should display expense overview page for logged-in user."""
         with client.session_transaction() as sess:
             sess['user_id'] = 1  # Demo user ID from seed_db()
 
         response = client.get("/profile")
         assert response.status_code == 200
-        assert b"My Profile" in response.data
-        assert b"Manage your account information" in response.data
-        assert b"Demo User" in response.data  # Seeded demo user
-        assert b"demo@spendly.com" in response.data
-        assert b"Member Since" in response.data
+        assert b"My Expenses" in response.data
+        assert b"Track and manage your spending" in response.data
+        assert b"Your Expenses" in response.data
+        assert b"Total Spent" in response.data
+        assert b"Transactions" in response.data
+        assert b"By Category" in response.data
+        assert b"Recent Transactions" in response.data
 
     def test_profile_displays_formatted_date(self, app, client):
-        """GET /profile should format created_at as readable date."""
+        """GET /profile should display transaction dates in readable format."""
         with client.session_transaction() as sess:
             sess['user_id'] = 1
 
         response = client.get("/profile")
         assert response.status_code == 200
-        # Should contain a month name and year (date format: "Month DD, YYYY")
+        # Should contain abbreviated month names and year (date format: "Mon DD, YYYY")
         assert any(month in response.data.decode() for month in [
-            "January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"
+            "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
         ])
+        assert "2026" in response.data.decode()
 
     def test_profile_edit_form_present(self, client):
-        """GET /profile should include edit form with name and email fields."""
+        """GET /profile should display expense overview with transactions."""
         with client.session_transaction() as sess:
             sess['user_id'] = 1
 
         response = client.get("/profile")
         assert response.status_code == 200
-        assert b'<form method="POST"' in response.data
-        assert b'name="name"' in response.data
-        assert b'name="email"' in response.data
-        assert b'type="submit"' in response.data
+        # Should show expense overview
+        assert b"Your Expenses" in response.data
+        assert b"Total Spent" in response.data
+        assert b"Transactions" in response.data
+        assert b"By Category" in response.data
+        assert b"Recent Transactions" in response.data
 
     def test_profile_update_valid_name(self, app, client):
         """POST /profile should update name and redirect."""
