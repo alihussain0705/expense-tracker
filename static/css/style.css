@@ -549,6 +549,224 @@ a { color: inherit; text-decoration: none; }
 .auth-switch a:hover { text-decoration: underline; }
 
 /* ------------------------------------------------------------------ */
+/* Profile page                                                        */
+/* ------------------------------------------------------------------ */
+
+.profile-info {
+    background: var(--paper);
+    padding: 1.5rem;
+    border-radius: var(--radius-md);
+    margin-bottom: 2rem;
+    border: 1px solid var(--border-soft);
+}
+
+.info-group {
+    margin-bottom: 1rem;
+}
+
+.info-group:last-child {
+    margin-bottom: 0;
+}
+
+.info-label {
+    display: block;
+    font-weight: 600;
+    color: var(--ink-soft);
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.info-value {
+    color: var(--ink);
+    margin: 0;
+    font-size: 1rem;
+}
+
+.profile-form {
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-soft);
+}
+
+.profile-form-title {
+    font-size: 1.1rem;
+    color: var(--ink);
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    font-family: var(--font-body);
+}
+
+/* Expense Overview Section */
+.expense-overview {
+    background: var(--paper);
+    padding: 1.5rem;
+    border-radius: var(--radius-md);
+    margin: 2rem 0;
+    border: 1px solid var(--border-soft);
+}
+
+.expense-title {
+    font-size: 1.1rem;
+    color: var(--ink);
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    font-family: var(--font-body);
+}
+
+/* Summary cards */
+.expense-summary {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.summary-card {
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 1rem;
+    text-align: center;
+}
+
+.summary-label {
+    font-size: 0.75rem;
+    color: var(--ink-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0 0 0.5rem 0;
+}
+
+.summary-value {
+    font-size: 1.5rem;
+    color: var(--accent);
+    font-weight: 700;
+    margin: 0;
+}
+
+/* Category breakdown */
+.category-section {
+    margin-bottom: 2rem;
+}
+
+.category-title {
+    font-size: 0.9rem;
+    color: var(--ink);
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.category-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.category-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1rem;
+    padding: 0.75rem;
+    background: var(--paper-card);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-sm);
+    align-items: center;
+}
+
+.category-name {
+    font-weight: 500;
+    color: var(--ink);
+}
+
+.category-amount {
+    font-weight: 600;
+    color: var(--accent);
+    text-align: right;
+}
+
+.category-count {
+    grid-column: 1 / -1;
+    font-size: 0.8rem;
+    color: var(--ink-muted);
+}
+
+/* Recent transactions */
+.recent-section {
+    margin-top: 2rem;
+}
+
+.recent-title {
+    font-size: 0.9rem;
+    color: var(--ink);
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.transaction-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.transaction-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1rem;
+    padding: 0.75rem;
+    background: var(--paper-card);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-sm);
+    align-items: center;
+}
+
+.transaction-left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.transaction-date {
+    font-size: 0.8rem;
+    color: var(--ink-muted);
+}
+
+.transaction-category {
+    font-weight: 500;
+    color: var(--ink);
+}
+
+.transaction-description {
+    font-size: 0.85rem;
+    color: var(--ink-muted);
+}
+
+.transaction-right {
+    text-align: right;
+}
+
+.transaction-amount {
+    font-weight: 600;
+    color: var(--ink);
+}
+
+/* Empty state */
+.expense-empty {
+    background: var(--accent-light);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius-sm);
+    padding: 1.5rem;
+    text-align: center;
+    color: var(--accent);
+    margin: 2rem 0;
+}
+
+.expense-empty p {
+    margin: 0;
+}
+
+/* ------------------------------------------------------------------ */
 /* Footer                                                              */
 /* ------------------------------------------------------------------ */
 
@@ -615,4 +833,18 @@ a { color: inherit; text-decoration: none; }
 @media (max-width: 600px) {
     .nav-links a:not(.nav-cta) { display: none; }
     .hero { padding: 3rem 1rem 2rem; }
+
+    .expense-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .category-item,
+    .transaction-item {
+        grid-template-columns: 1fr;
+    }
+
+    .category-amount,
+    .transaction-right {
+        text-align: left;
+    }
 }
